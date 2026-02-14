@@ -37,7 +37,7 @@
 //     } catch (error) {
 //         console.log(error.response?.data)
 //                 return res.status(500).json({message:`SignUp Error`})
-                
+
 
 //     }
 // }
@@ -158,12 +158,20 @@ export const signUp = async (req, res) => {
 
     const token = genToken(user._id);
 
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   sameSite: "strict",
+    //   secure: false,
+    //   maxAge: 7 * 24 * 60 * 60 * 1000,
+    // });
+
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "strict",
-      secure: false,
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      sameSite: "none",   // cross-site cookies allow
+      secure: true,       // must be true for HTTPS (Vercel + Render are HTTPS)
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
+
 
     res.status(201).json(user);
   } catch {
